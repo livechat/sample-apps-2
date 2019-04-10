@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { TabsWrapper, TabsList, Tab } from "@livechat/design-system";
 import "styled-components/macro";
 
@@ -16,11 +16,17 @@ const App = ({ accessToken }) => {
 
   const items = [{ id: "tags", title: "Tags" }, { id: "cans", title: "Cans" }];
 
+  const makeUpdate = () => {
+    setUpdate(!update);
+  };
+
   useEffect(() => {
-    api.fetchGroups(accessToken).then(response => setGroups(response.data));
+    // api.fetchGroups(accessToken).then(response => setGroups(response.data));
     api.fetchCans(accessToken).then(response => setCans(response.data));
     api.fetchTags(accessToken).then(response => setTags(response.data));
-  }, []);
+  }, [update]);
+
+  console.log(accessToken);
 
   return (
     <div
@@ -43,10 +49,10 @@ const App = ({ accessToken }) => {
         </TabsList>
       </TabsWrapper>
       {tabId === "tags" && (
-        <Tags tags={tags} setUpdate={setUpdate} accessToken={accessToken} />
+        <Tags tags={tags} update={makeUpdate} accessToken={accessToken} />
       )}
       {tabId === "cans" && (
-        <Cans cans={cans} setUpdate={setUpdate} accessToken={accessToken} />
+        <Cans cans={cans} update={makeUpdate} accessToken={accessToken} />
       )}
     </div>
   );

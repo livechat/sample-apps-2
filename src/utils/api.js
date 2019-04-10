@@ -13,7 +13,8 @@ const createApiRequest = (method, route, accessToken, data) =>
     method,
     url: server_url + route,
     headers: {
-      Authorization: "Bearer " + accessToken
+      Authorization: "Bearer " + accessToken,
+      "X-API-Version": "2"
     },
     data
   }).catch(function(error) {
@@ -21,13 +22,38 @@ const createApiRequest = (method, route, accessToken, data) =>
   });
 
 const api = {
-  fetchGroups: accessToken => createApiRequest(GET, "/groups", accessToken),
+  // fetchGroups: accessToken => createApiRequest(GET, "/groups", accessToken),
   fetchCans: accessToken => createApiRequest(GET, "/cans", accessToken),
+
   fetchTags: accessToken => createApiRequest(GET, "/tags", accessToken),
-  removeTag: (name, group, accessToken) =>
+
+  removeTag: (name, accessToken) =>
     createApiRequest(DELETE, "/tags", accessToken, {
-      tag: name,
-      group: group
+      token: accessToken,
+      tag: name
+    }),
+
+  removeCan: (id, accessToken) =>
+    createApiRequest(DELETE, "/cans", accessToken, {
+      token: accessToken,
+      id
+    }),
+
+  createCan: (content, tags, accessToken) =>
+    createApiRequest(POST, "/cans", accessToken, {
+      data: {
+        token: accessToken,
+        tags: tags.substring(1, tags.length).split("#"),
+        text: content
+      }
+    }),
+
+  createTag: (tag, accessToken) =>
+    createApiRequest(POST, "/tags", accessToken, {
+      data: {
+        token: accessToken,
+        tag
+      }
     })
 };
 
