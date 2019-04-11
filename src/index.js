@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import ReactDOM from "react-dom";
+import { createGlobalStyle } from "styled-components";
 
 import { accountsSdk } from "@livechat/accounts-sdk";
 import "@livechat/design-system/dist/design-system.css";
 import config from "./utils/config";
 import App from "./components";
+import Spinner from "./components/Spinner";
+
+const GlobalStyle = createGlobalStyle`
+  ::-webkit-scrollbar {
+      display: none;
+  }
+`;
 
 const AppWithAuth = () => {
   const [accessToken, setAccessToken] = useState(null);
@@ -21,10 +29,15 @@ const AppWithAuth = () => {
   });
 
   if (!accessToken) {
-    return <b>Loading...</b>;
+    return <Spinner marginTop="calc(100% - 50px)" />;
   }
 
-  return <App accessToken={accessToken} />;
+  return (
+    <Fragment>
+      <GlobalStyle />
+      <App accessToken={accessToken} />
+    </Fragment>
+  );
 };
 
 ReactDOM.render(<AppWithAuth />, document.getElementById("root"));

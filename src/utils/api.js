@@ -22,7 +22,6 @@ const createApiRequest = (method, route, accessToken, data) =>
   });
 
 const api = {
-  // fetchGroups: accessToken => createApiRequest(GET, "/groups", accessToken),
   fetchCans: accessToken => createApiRequest(GET, "/cans", accessToken),
 
   fetchTags: accessToken => createApiRequest(GET, "/tags", accessToken),
@@ -43,7 +42,7 @@ const api = {
     createApiRequest(POST, "/cans", accessToken, {
       data: {
         token: accessToken,
-        tags: tags.substring(1, tags.length).split("#"),
+        tags: tags.substring(0, tags.length).split("#"),
         text: content
       }
     }),
@@ -53,6 +52,16 @@ const api = {
       data: {
         token: accessToken,
         tag
+      }
+    }),
+
+  updateCan: (id, content, tags, accessToken) =>
+    createApiRequest(PUT, "/cans", accessToken, {
+      data: {
+        token: accessToken,
+        tags: tags.substring(0, tags.length).split("#"),
+        text: content,
+        id
       }
     })
 };

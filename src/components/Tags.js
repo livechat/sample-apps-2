@@ -9,6 +9,7 @@ import {
   ActionModal
 } from "@livechat/design-system";
 import MaterialIcon from "material-icons-react";
+import Spinner from "./Spinner";
 
 import "styled-components/macro";
 import api from "../utils/api";
@@ -31,6 +32,7 @@ const tagContainerStyle = `
 
 const helpStyle = `
   width: 100%;
+  margin: 10px 0;
   font-size: 15px;
   text-align: center;
   font-family: "Lucida Sans", sans-serif;
@@ -45,19 +47,44 @@ const contentStyle = `
   margin: 15px auto;
 `;
 
+const toastStyle = `
+  border: solid 1px hsl(0, 0%, 90%);
+  box-shadow: none;
+`;
+
+const formFooterStyle = `
+  display: grid;
+  justify-items: end;
+`;
+
+const formStyle = `
+  display: grid;
+  justify-items: center;
+`;
+
+const buttonStyle = `
+  margin-right: 10px 
+`;
+
 export default ({ tags, update, accessToken }) => {
   const [remove, setRemove] = useState([]);
   const [open, setOpen] = useState(false);
   const [tagToRemove, setTagToRemove] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const [tag, setTag] = useState([]);
+  const [tag, setTag] = useState("");
 
   const onSubmit = e => {
     e.preventDefault();
-    api.createTag(tag, accessToken).then(() => {
-      update();
-      setOpen(false);
-    });
+    setLoading(true);
+    api
+      .createTag(tag, accessToken)
+      .then(update)
+      .then(() => {
+        setOpen(false);
+        setLoading(false);
+        setTag("");
+      });
   };
 
   return (
@@ -70,13 +97,16 @@ export default ({ tags, update, accessToken }) => {
         <ModalBase onClose={() => setOpen(false)}>
           <div css={contentStyle}>
             <Form
+              css={formStyle}
               onSubmit={onSubmit}
               labelText="Create tag"
               helperText={"Fill fields with tag name"}
               formFooter={
-                <Button primary submit>
-                  Add can
-                </Button>
+                <div css={formFooterStyle}>
+                  <Button primary submit loading={loading}>
+                    Add tag
+                  </Button>
+                </div>
               }
             >
               <FieldGroup>
@@ -97,19 +127,23 @@ export default ({ tags, update, accessToken }) => {
           heading="Danger!"
           actions={
             <Fragment>
-              <Button
-                onClick={() => setTagToRemove(null)}
-                style={{ marginRight: "10px" }}
-              >
+              <Button onClick={() => setTagToRemove(null)} css={buttonStyle}>
                 Wait, go back
               </Button>
               <Button
                 onClick={() => {
                   setRemove([...remove, tagToRemove]);
-                  api.removeTag(tagToRemove, accessToken).then(update);
-                  setTagToRemove(null);
+                  setLoading(true);
+                  api
+                    .removeTag(tagToRemove, accessToken)
+                    .then(() => update())
+                    .then(() => {
+                      setTagToRemove(null);
+                      setLoading(false);
+                    });
                 }}
                 destructive
+                loading={loading}
               >
                 Yes, delete this tag
               </Button>
@@ -123,15 +157,14 @@ export default ({ tags, update, accessToken }) => {
         </ActionModal>
       )}
       <div css={tagContainerStyle}>
-        {tags &&
+        {tags ? (
           tags.map((tag, i) => {
             const { name } = tag;
-            const isRemoving = remove.includes(name);
             return (
               <Toast
-                variant={isRemoving ? "warning" : "notification"}
+                css={toastStyle}
                 key={i}
-                removable={!isRemoving}
+                removable
                 onClose={() => {
                   setTagToRemove(name);
                 }}
@@ -139,7 +172,10 @@ export default ({ tags, update, accessToken }) => {
                 #{name}
               </Toast>
             );
-          })}
+          })
+        ) : (
+          <Spinner marginTop="100px" />
+        )}
       </div>
       <span css={helpStyle}>
         <a

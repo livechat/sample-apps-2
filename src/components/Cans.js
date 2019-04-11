@@ -9,6 +9,7 @@ import {
   ActionModal
 } from "@livechat/design-system";
 import MaterialIcon from "material-icons-react";
+import Spinner from "./Spinner";
 
 import "styled-components/macro";
 import api from "../utils/api";
@@ -31,6 +32,7 @@ const tagContainerStyle = `
 
 const helpStyle = `
   width: 100%;
+  margin: 10px 0;
   font-size: 15px;
   text-align: center;
   font-family: "Lucida Sans", sans-serif;
@@ -38,7 +40,7 @@ const helpStyle = `
 
 const tagStyle = `
   color: gray;
-  font-size: 10px;
+  font-size: 12px;
   margin-left: 5px;
 `;
 
@@ -51,38 +53,82 @@ const contentStyle = `
   margin: 15px auto;
 `;
 
+const toastStyle = `
+  box-shadow: none;
+  border: solid 1px hsl(0, 0%, 90%);
+`;
+
+const formFooterStyle = `
+  display: grid;
+  justify-items: end;
+`;
+
+const formStyle = `
+  display: grid;
+  justify-items: center;
+`;
+
+const titleStyle = `
+  cursor: pointer;
+  :hover {
+    color: #4384f5;
+  }
+`;
+
+const buttonStyle = `
+  margin-right: 10px 
+`;
+
 export default ({ cans, accessToken, update }) => {
   const [remove, setRemove] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState([false, null]);
   const [canToRemove, setCanToRemove] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
 
   const onSubmit = e => {
     e.preventDefault();
-    api.createCan(content, tags, accessToken).then(() => {
-      update();
-      setOpen(false);
+    setLoading(true);
+    const apiRequest = open[1]
+      ? api.updateCan(open[1].id, content, tags, accessToken)
+      : api.createCan(content, tags, accessToken);
+    apiRequest.then(update).then(() => {
+      setOpen([false]);
+      setLoading(false);
+      setContent("");
+      setTags("");
     });
   };
   return (
     <div css={containerStyle}>
-      <Button primary onClick={() => setOpen(true)}>
+      <Button primary onClick={() => setOpen([true])}>
         <span css={labelStyle}>Add new canned response</span>
         <MaterialIcon icon="create" color="white" />
       </Button>
-      {open && (
-        <ModalBase onClose={() => setOpen(false)}>
+      {open[0] && (
+        <ModalBase
+          onClose={() => {
+            setOpen([false]);
+            setTags([]);
+            setContent("");
+          }}
+        >
           <div css={contentStyle}>
             <Form
+              css={formStyle}
               onSubmit={onSubmit}
-              labelText="Create canned response"
+              labelText={
+                open[1] ? "Update canned response" : "Create canned response"
+              }
               helperText={"Fill fields with content and tags"}
               formFooter={
-                <Button primary submit>
-                  Add can
-                </Button>
+                <div css={formFooterStyle}>
+                  <Button primary submit loading={loading}>
+                    {open[1] ? "Update can" : "Add can"}
+                  </Button>
+                </div>
               }
             >
               <FieldGroup>
@@ -109,19 +155,23 @@ export default ({ cans, accessToken, update }) => {
           heading="Danger!"
           actions={
             <Fragment>
-              <Button
-                onClick={() => setCanToRemove(null)}
-                style={{ marginRight: "10px" }}
-              >
+              <Button onClick={() => setCanToRemove(null)} css={buttonStyle}>
                 Wait, go back
               </Button>
               <Button
                 onClick={() => {
                   setRemove([...remove, canToRemove]);
-                  api.removeCan(canToRemove, accessToken).then(update);
-                  setCanToRemove(null);
+                  setLoading(true);
+                  api
+                    .removeCan(canToRemove, accessToken)
+                    .then(() => update())
+                    .then(() => {
+                      setCanToRemove(null);
+                      setLoading(false);
+                    });
                 }}
                 destructive
+                loading={loading}
               >
                 Yes, delete this can
               </Button>
@@ -135,32 +185,46 @@ export default ({ cans, accessToken, update }) => {
         </ActionModal>
       )}
       <div css={tagContainerStyle}>
-        {cans &&
+        {cans ? (
           cans.map((can, i) => {
             const { id } = can;
-            const isRemoving = remove.includes(id);
             return (
               <Toast
-                variant={isRemoving && "warning"}
+                css={toastStyle}
                 key={i}
-                removable={!isRemoving}
+                removable
                 onClose={() => {
                   setCanToRemove(id);
                 }}
               >
-                {can.text}
-                {!isRemoving && (
-                  <div>
-                    {can.tags.map((tag, i) => (
-                      <span css={tagStyle} key={i}>
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <span
+                  css={titleStyle}
+                  onClick={() => {
+                    setOpen([true, can]);
+                    setTags(can.tags);
+                    setContent(can.text);
+                  }}
+                >
+                  {can.text}{" "}
+                  <MaterialIcon
+                    icon="create"
+                    color="hsl(0, 0%, 60%)"
+                    size={15}
+                  />
+                </span>
+                <div>
+                  {can.tags.map((tag, i) => (
+                    <span css={tagStyle} key={i}>
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
               </Toast>
             );
-          })}
+          })
+        ) : (
+          <Spinner marginTop="100px" />
+        )}
       </div>
       <span css={helpStyle}>
         <a
