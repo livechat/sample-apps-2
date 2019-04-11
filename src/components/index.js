@@ -13,6 +13,7 @@ const mainConatinerStyle = `
   grid-gap: 10px;
   padding: 5px;
   border-radius: 8px;
+  max-width: 500px;
 `;
 
 const tabStyle = `

@@ -22,8 +22,14 @@ const AppWithAuth = () => {
     accountsSdk.init({
       client_id,
       onIdentityFetched: (error, data) => {
-        const { access_token } = data;
-        setAccessToken(access_token);
+        if (data && data.access_token) {
+          const { access_token } = data;
+          setAccessToken(access_token);
+        } else {
+          window.location.href = `https://accounts.livechatinc.com/?response_type=token&client_id=${config.client_id}&redirect_uri=${
+            window.location.href
+            }`;
+        }
       }
     });
   });
