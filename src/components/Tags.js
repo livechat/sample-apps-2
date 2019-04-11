@@ -52,11 +52,6 @@ const toastStyle = `
   box-shadow: none;
 `;
 
-const formFooterStyle = `
-  display: grid;
-  justify-items: end;
-`;
-
 const formStyle = `
   display: grid;
   justify-items: center;
@@ -102,11 +97,9 @@ export default ({ tags, update, accessToken }) => {
               labelText="Create tag"
               helperText={"Fill fields with tag name"}
               formFooter={
-                <div css={formFooterStyle}>
-                  <Button primary submit loading={loading}>
-                    Add tag
-                  </Button>
-                </div>
+                <Button primary submit loading={loading}>
+                  Add tag
+                </Button>
               }
             >
               <FieldGroup>

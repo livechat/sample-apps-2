@@ -18,17 +18,16 @@ const AppWithAuth = () => {
   const [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
-    const { client_id } = config;
+    const { client_id, account_url } = config;
     accountsSdk.init({
       client_id,
       onIdentityFetched: (error, data) => {
         if (data && data.access_token) {
-          const { access_token } = data;
-          setAccessToken(access_token);
+          setAccessToken(data.access_token);
         } else {
-          window.location.href = `https://accounts.livechatinc.com/?response_type=token&client_id=${config.client_id}&redirect_uri=${
+          window.location.href = `${account_url}?response_type=token&client_id=${client_id}&redirect_uri=${
             window.location.href
-            }`;
+          }`;
         }
       }
     });

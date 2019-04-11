@@ -42,7 +42,7 @@ const api = {
     createApiRequest(POST, "/cans", accessToken, {
       data: {
         token: accessToken,
-        tags: tags.substring(0, tags.length).split("#"),
+        tags,
         text: content
       }
     }),
@@ -59,7 +59,7 @@ const api = {
     createApiRequest(PUT, "/cans", accessToken, {
       data: {
         token: accessToken,
-        tags: tags.substring(0, tags.length).split("#"),
+        tags,
         text: content,
         id
       }

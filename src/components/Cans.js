@@ -10,6 +10,7 @@ import {
 } from "@livechat/design-system";
 import MaterialIcon from "material-icons-react";
 import Spinner from "./Spinner";
+import ChipInput from "material-ui-chip-input";
 
 import "styled-components/macro";
 import api from "../utils/api";
@@ -58,13 +59,9 @@ const toastStyle = `
   border: solid 1px hsl(0, 0%, 90%);
 `;
 
-const formFooterStyle = `
-  display: grid;
-  justify-items: end;
-`;
-
 const formStyle = `
   display: grid;
+  grid-template-rows: 100px 130px 70px; 
   justify-items: center;
 `;
 
@@ -87,6 +84,7 @@ export default ({ cans, accessToken, update }) => {
 
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
+  const [currentTag, setCurrentTag] = useState("");
 
   const onSubmit = e => {
     e.preventDefault();
@@ -101,6 +99,7 @@ export default ({ cans, accessToken, update }) => {
       setTags("");
     });
   };
+
   return (
     <div css={containerStyle}>
       <Button primary onClick={() => setOpen([true])}>
@@ -124,11 +123,9 @@ export default ({ cans, accessToken, update }) => {
               }
               helperText={"Fill fields with content and tags"}
               formFooter={
-                <div css={formFooterStyle}>
-                  <Button primary submit loading={loading}>
-                    {open[1] ? "Update can" : "Add can"}
-                  </Button>
-                </div>
+                <Button primary submit loading={loading}>
+                  {open[1] ? "Update can" : "Add can"}
+                </Button>
               }
             >
               <FieldGroup>
@@ -137,13 +134,45 @@ export default ({ cans, accessToken, update }) => {
                   onChange={e => setContent(e.target.value)}
                   placeholder="Content.."
                   required
+                  css={`
+                    margin: 0;
+                  `}
                 />
-                <InputField
-                  value={tags}
-                  onChange={e => setTags(e.target.value)}
-                  placeholder="Tags.."
-                  required
-                />
+                <div
+                  css={`
+                    width: 189px;
+                    display: grid;
+                    grid-gap: 5px;
+                    grid-template: "input btn" / 100px 80px;
+                  `}
+                >
+                  <InputField
+                    description={tags.length > 0 && "#" + tags.join(" #")}
+                    onChange={e => setCurrentTag(e.target.value)}
+                    placeholder="Tags.."
+                    value={currentTag}
+                    css={`
+                      grid-area: input;
+                      > div > input {
+                        width: 100px !important;
+                      }
+                    `}
+                  />
+                  <Button
+                    primary
+                    onClick={() => {
+                      setCurrentTag("");
+                      setTags([...tags, currentTag]);
+                    }}
+                    css={`
+                      grid-area: btn;
+                      height: 36px;
+                      width: 50px !important;
+                    `}
+                  >
+                    Add tag
+                  </Button>
+                </div>
               </FieldGroup>
             </Form>
           </div>
