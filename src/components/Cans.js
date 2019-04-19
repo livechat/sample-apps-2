@@ -135,7 +135,7 @@ const EditModal = ({
   setCan,
   accessToken
 }) => {
-  const [tags, setTags] = useState(["test1", "test2", "test3"]);
+  const [tags, setTags] = useState([...can.tags]);
   const [content, setContent] = useState(can.text);
   const [currentTag, setCurrentTag] = useState("");
   const [loading, setLoading] = useState(false);
@@ -143,10 +143,11 @@ const EditModal = ({
   const onSubmit = e => {
     e.preventDefault();
     setLoading(true);
-    const apiRequest = can
+    const apiRequest = can.id
       ? api.updateCan(can.id, content, tags, accessToken)
       : api.createCan(content, tags, accessToken);
     apiRequest.then(update).then(() => {
+      resetState();
       setOpen(false);
     });
   };
@@ -211,15 +212,13 @@ const EditModal = ({
                   return (
                     <span key={i} css={tagElementStyle}>
                       #{tag}
-                      <span css={deleteIconStyle}>
-                        <MaterialIcon
-                          icon="delete_forever"
-                          onClick={() => {
-                            setTags(
-                              [...tags].filter(element => element !== tag)
-                            );
-                          }}
-                        />
+                      <span
+                        css={deleteIconStyle}
+                        onClick={() => {
+                          setTags([...tags].filter(element => element !== tag));
+                        }}
+                      >
+                        <MaterialIcon icon="delete_forever" />
                       </span>
                     </span>
                   );
