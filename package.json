@@ -13,6 +13,7 @@
     "react-dom": "^16.8.6",
     "react-loader-spinner": "^2.3.0",
     "react-scripts": "2.1.8",
+    "react-tag-input": "^6.4.0",
     "styled-components": "^4.2.0"
   },
   "scripts": {

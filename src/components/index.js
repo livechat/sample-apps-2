@@ -24,7 +24,9 @@ const tabStyle = `
 const App = ({ accessToken }) => {
   const [cans, setCans] = useState(null);
   const [tags, setTags] = useState(null);
-  const [tabId, setTabId] = useState("tags");
+  const [tabId, setTabId] = useState("cans");
+
+  const [test, setTest] = useState([1, 2, 3, 4]);
 
   const items = [{ id: "tags", title: "Tags" }, { id: "cans", title: "Cans" }];
 

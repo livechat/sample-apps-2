@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import {
   Button,
   Toast,
@@ -10,7 +10,6 @@ import {
 } from "@livechat/design-system";
 import MaterialIcon from "material-icons-react";
 import Spinner from "./Spinner";
-import ChipInput from "material-ui-chip-input";
 
 import "styled-components/macro";
 import api from "../utils/api";
@@ -61,7 +60,8 @@ const toastStyle = `
 
 const formStyle = `
   display: grid;
-  grid-template-rows: 100px 130px 70px; 
+  grid-template-rows: 70px auto 38px; 
+  grid-gap: 15px;
   justify-items: center;
 `;
 
@@ -76,107 +76,186 @@ const buttonStyle = `
   margin-right: 10px 
 `;
 
-export default ({ cans, accessToken, update }) => {
-  const [remove, setRemove] = useState([]);
-  const [open, setOpen] = useState([false, null]);
-  const [canToRemove, setCanToRemove] = useState(null);
-  const [loading, setLoading] = useState(false);
+const formContainer = `
+  width: 189px;
+  display: grid;
+  grid-gap: 5px;
+  grid-template:
+    "content content" 38px
+    "input btn" 38px
+    "tags tags" auto
+    / 100px 80px;
+`;
 
-  const [content, setContent] = useState("");
-  const [tags, setTags] = useState([]);
+const contentInputStyle = `
+  margin: 0;
+  grid-area: content;
+`;
+
+const tagInputStyle = `
+  grid-area: input;
+  > div > input {
+    width: 100px !important;
+  }
+`;
+
+const tagButtonStyle = `
+  grid-area: btn;
+  height: 36px;
+  width: 50px !important;
+`;
+
+const tagsContainerStyle = `
+  grid-area: tags;
+  font-size: 15px;
+  display: flex;
+  flex-wrap: wrap;
+
+  > span {
+  margin: 5px;
+  }
+`;
+
+const tagElementStyle = `
+  display: flex;
+  align-items: center;
+`;
+
+const deleteIconStyle = `
+  cursor: pointer;
+  :hover > i {
+    color: #d64546;
+  }
+`;
+
+const EditModal = ({
+  can = { tags: [], text: "" },
+  setOpen,
+  update,
+  setCan,
+  accessToken
+}) => {
+  const [tags, setTags] = useState(["test1", "test2", "test3"]);
+  const [content, setContent] = useState(can.text);
   const [currentTag, setCurrentTag] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = e => {
     e.preventDefault();
     setLoading(true);
-    const apiRequest = open[1]
-      ? api.updateCan(open[1].id, content, tags, accessToken)
+    const apiRequest = can
+      ? api.updateCan(can.id, content, tags, accessToken)
       : api.createCan(content, tags, accessToken);
     apiRequest.then(update).then(() => {
-      setOpen([false]);
-      setLoading(false);
-      setContent("");
-      setTags("");
+      setOpen(false);
     });
   };
 
+  const resetState = () => {
+    setTags([]);
+    setContent("");
+    setCurrentTag("");
+    setCan(undefined);
+  };
+
+  return (
+    <ModalBase
+      onClose={() => {
+        setOpen(false);
+        resetState();
+      }}
+    >
+      <div css={contentStyle}>
+        <Form
+          css={formStyle}
+          onSubmit={onSubmit}
+          labelText={can ? "Update canned response" : "Create canned response"}
+          helperText={"Fill fields with content and tags"}
+          formFooter={
+            <Button primary submit loading={loading}>
+              {can ? "Update can" : "Add can"}
+            </Button>
+          }
+        >
+          <FieldGroup>
+            <div css={formContainer}>
+              <InputField
+                id={"content"}
+                value={content}
+                onChange={e => setContent(e.target.value)}
+                placeholder="Content.."
+                required
+                css={contentInputStyle}
+              />
+              <InputField
+                id={"tag"}
+                onChange={e => setCurrentTag(e.target.value)}
+                placeholder="Tag.."
+                value={currentTag}
+                css={tagInputStyle}
+              />
+              <Button
+                primary
+                onClick={() => {
+                  if (currentTag) {
+                    setTags([...tags, currentTag]);
+                  }
+                  setCurrentTag("");
+                }}
+                css={tagButtonStyle}
+              >
+                Add
+              </Button>
+              <div css={tagsContainerStyle}>
+                {tags.map((tag, i) => {
+                  return (
+                    <span key={i} css={tagElementStyle}>
+                      #{tag}
+                      <span css={deleteIconStyle}>
+                        <MaterialIcon
+                          icon="delete_forever"
+                          onClick={() => {
+                            setTags(
+                              [...tags].filter(element => element !== tag)
+                            );
+                          }}
+                        />
+                      </span>
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          </FieldGroup>
+        </Form>
+      </div>
+    </ModalBase>
+  );
+};
+
+export default ({ cans, accessToken, update }) => {
+  const [remove, setRemove] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const [canToRemove, setCanToRemove] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const [updateCan, setUpdateCan] = useState(undefined);
+
   return (
     <div css={containerStyle}>
-      <Button primary onClick={() => setOpen([true])}>
+      <Button primary onClick={() => setOpen(true)}>
         <span css={labelStyle}>Add new canned response</span>
         <MaterialIcon icon="create" color="white" />
       </Button>
-      {open[0] && (
-        <ModalBase
-          onClose={() => {
-            setOpen([false]);
-            setTags([]);
-            setContent("");
-          }}
-        >
-          <div css={contentStyle}>
-            <Form
-              css={formStyle}
-              onSubmit={onSubmit}
-              labelText={
-                open[1] ? "Update canned response" : "Create canned response"
-              }
-              helperText={"Fill fields with content and tags"}
-              formFooter={
-                <Button primary submit loading={loading}>
-                  {open[1] ? "Update can" : "Add can"}
-                </Button>
-              }
-            >
-              <FieldGroup>
-                <InputField
-                  value={content}
-                  onChange={e => setContent(e.target.value)}
-                  placeholder="Content.."
-                  required
-                  css={`
-                    margin: 0;
-                  `}
-                />
-                <div
-                  css={`
-                    width: 189px;
-                    display: grid;
-                    grid-gap: 5px;
-                    grid-template: "input btn" / 100px 80px;
-                  `}
-                >
-                  <InputField
-                    description={tags.length > 0 && "#" + tags.join(" #")}
-                    onChange={e => setCurrentTag(e.target.value)}
-                    placeholder="Tags.."
-                    value={currentTag}
-                    css={`
-                      grid-area: input;
-                      > div > input {
-                        width: 100px !important;
-                      }
-                    `}
-                  />
-                  <Button
-                    primary
-                    onClick={() => {
-                      setCurrentTag("");
-                      setTags([...tags, currentTag]);
-                    }}
-                    css={`
-                      grid-area: btn;
-                      height: 36px;
-                      width: 50px !important;
-                    `}
-                  >
-                    Add tag
-                  </Button>
-                </div>
-              </FieldGroup>
-            </Form>
-          </div>
-        </ModalBase>
+      {open && (
+        <EditModal
+          can={updateCan}
+          setOpen={setOpen}
+          update={update}
+          accessToken={accessToken}
+          setCan={setUpdateCan}
+        />
       )}
       {canToRemove && (
         <ActionModal
@@ -229,12 +308,11 @@ export default ({ cans, accessToken, update }) => {
                 <span
                   css={titleStyle}
                   onClick={() => {
-                    setOpen([true, can]);
-                    setTags(can.tags);
-                    setContent(can.text);
+                    setOpen(true);
+                    setUpdateCan(can);
                   }}
                 >
-                  {can.text}{" "}
+                  {can.text}
                   <MaterialIcon
                     icon="create"
                     color="hsl(0, 0%, 60%)"
@@ -258,6 +336,7 @@ export default ({ cans, accessToken, update }) => {
       <span css={helpStyle}>
         <a
           href="https://www.livechatinc.com/kb/canned-responses/"
+          rel="noopener noreferrer"
           target="_blank"
           css={linkStyle}
         >

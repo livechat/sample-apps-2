@@ -104,6 +104,7 @@ export default ({ tags, update, accessToken }) => {
             >
               <FieldGroup>
                 <InputField
+                  id={"name"}
                   value={tag}
                   onChange={e => setTag(e.target.value)}
                   placeholder="Tag name.."
@@ -116,6 +117,7 @@ export default ({ tags, update, accessToken }) => {
       )}
       {tagToRemove && (
         <ActionModal
+          id={"actionModal"}
           onClose={() => setTagToRemove(null)}
           heading="Danger!"
           actions={
@@ -174,6 +176,7 @@ export default ({ tags, update, accessToken }) => {
         <a
           href="https://www.livechatinc.com/kb/tagging-chats-and-tickets/"
           target="_blank"
+          rel="noopener noreferrer"
           css={linkStyle}
         >
           How to use tags?
