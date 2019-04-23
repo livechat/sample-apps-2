@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TabsWrapper, TabsList, Tab } from "@livechat/design-system";
 import "styled-components/macro";
+import MaterialIcon from "material-icons-react";
 
 import Tags from "./Tags";
 import Cans from "./Cans";
@@ -26,10 +27,6 @@ const App = ({ accessToken }) => {
   const [tags, setTags] = useState(null);
   const [tabId, setTabId] = useState("cans");
 
-  const [test, setTest] = useState([1, 2, 3, 4]);
-
-  const items = [{ id: "tags", title: "Tags" }, { id: "cans", title: "Cans" }];
-
   useEffect(() => {
     updateTags();
     updateCans();
@@ -45,15 +42,48 @@ const App = ({ accessToken }) => {
       <div css={tabStyle}>
         <TabsWrapper>
           <TabsList>
-            {items.map(({ id, count, title }) => (
-              <Tab
-                onSelect={() => setTabId(id)}
-                key={id}
-                isSelected={id === tabId}
+            <Tab
+              onSelect={() => setTabId("tags")}
+              key={"tags"}
+              isSelected={"tags" === tabId}
+            >
+              <div
+                css={`
+                  display: flex;
+                  align-items: center;
+                `}
               >
-                {title}
-              </Tab>
-            ))}
+                <img
+                  src="/icons/hash.png"
+                  css={`
+                    width: 12px;
+                    margin: 5px;
+                  `}
+                />
+                <span>Tags</span>
+              </div>
+            </Tab>
+            <Tab
+              onSelect={() => setTabId("cans")}
+              key={"cans"}
+              isSelected={"cans" === tabId}
+            >
+              <div
+                css={`
+                  display: flex;
+                  align-items: center;
+                `}
+              >
+                <img
+                  src="/icons/can.png"
+                  css={`
+                    width: 12px;
+                    margin: 5px;
+                  `}
+                />
+                <span>Cans</span>
+              </div>
+            </Tab>
           </TabsList>
         </TabsWrapper>
       </div>

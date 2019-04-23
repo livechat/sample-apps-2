@@ -22,48 +22,9 @@ const createApiRequest = (method, route, accessToken, data) =>
   });
 
 const api = {
-  fetchCans: accessToken => createApiRequest(GET, "/cans", accessToken),
-
-  fetchTags: accessToken => createApiRequest(GET, "/tags", accessToken),
-
-  removeTag: (name, accessToken) =>
-    createApiRequest(DELETE, "/tags", accessToken, {
-      token: accessToken,
-      tag: name
-    }),
-
-  removeCan: (id, accessToken) =>
-    createApiRequest(DELETE, "/cans", accessToken, {
-      token: accessToken,
-      id
-    }),
-
-  createCan: (content, tags, accessToken) =>
-    createApiRequest(POST, "/cans", accessToken, {
-      data: {
-        token: accessToken,
-        tags,
-        text: content
-      }
-    }),
-
-  createTag: (tag, accessToken) =>
-    createApiRequest(POST, "/tags", accessToken, {
-      data: {
-        token: accessToken,
-        tag
-      }
-    }),
-
-  updateCan: (id, content, tags, accessToken) =>
-    createApiRequest(PUT, "/cans", accessToken, {
-      data: {
-        token: accessToken,
-        tags,
-        text: content,
-        id
-      }
-    })
+  fetchRatings: (interval, accessToken) =>
+    createApiRequest(GET, `/ratings/${interval}`, accessToken),
+  fetchTimes: accessToken => createApiRequest(GET, `/responses`, accessToken)
 };
 
 export default api;

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { TabsWrapper, TabsList, Tab } from "@livechat/design-system";
 import "styled-components/macro";
 
-import Tags from "./Tags";
-import Cans from "./Cans";
+import Ratings from "./Ratings";
+import Times from "./Times";
 
 import api from "../utils/api";
 
@@ -22,46 +22,58 @@ const tabStyle = `
 `;
 
 const App = ({ accessToken }) => {
-  const [cans, setCans] = useState(null);
-  const [tags, setTags] = useState(null);
-  const [tabId, setTabId] = useState("cans");
+  const [ratings, setRatings] = useState(null);
+  const [times, setTimes] = useState(null);
 
-  const [test, setTest] = useState([1, 2, 3, 4]);
+  const [time, setTime] = useState("week");
+  const [tabId, setTabId] = useState("ratings");
 
-  const items = [{ id: "tags", title: "Tags" }, { id: "cans", title: "Cans" }];
+  const [error, setError] = useState(null);
+
+  const fetchRatings = timeInterval =>
+    api
+      .fetchRatings(timeInterval, accessToken)
+      .then(response => setRatings(response.data))
+      .catch(e => console.log(e));
+
+  const fetchTimes = () =>
+    api
+      .fetchTimes(accessToken)
+      .then(response => setTimes(response.data))
+      .catch(e => setError(e));
 
   useEffect(() => {
-    updateTags();
-    updateCans();
-  }, []);
-
-  const updateCans = () =>
-    api.fetchCans(accessToken).then(response => setCans(response.data));
-  const updateTags = () =>
-    api.fetchTags(accessToken).then(response => setTags(response.data));
+    fetchRatings(time);
+    fetchTimes();
+  }, [time]);
 
   return (
     <div css={mainConatinerStyle}>
       <div css={tabStyle}>
         <TabsWrapper>
           <TabsList>
-            {items.map(({ id, count, title }) => (
-              <Tab
-                onSelect={() => setTabId(id)}
-                key={id}
-                isSelected={id === tabId}
-              >
-                {title}
-              </Tab>
-            ))}
+            <Tab
+              onSelect={() => setTabId("ratings")}
+              key={"ratings"}
+              isSelected={"ratings" === tabId}
+            >
+              Ratings
+            </Tab>
+            <Tab
+              onSelect={() => setTabId("times")}
+              key={"times"}
+              isSelected={"times" === tabId}
+            >
+              Times
+            </Tab>
           </TabsList>
         </TabsWrapper>
       </div>
-      {tabId === "tags" && (
-        <Tags tags={tags} update={updateTags} accessToken={accessToken} />
+      {tabId === "ratings" && (
+        <Ratings ratings={ratings} time={time} setTime={setTime} />
       )}
-      {tabId === "cans" && (
-        <Cans cans={cans} update={updateCans} accessToken={accessToken} />
+      {tabId === "times" && (
+        <Times times={times} time={time} setTime={setTime} error={error} />
       )}
     </div>
   );

@@ -85,8 +85,17 @@ export default ({ tags, update, accessToken }) => {
   return (
     <div css={containerStyle}>
       <Button primary onClick={() => setOpen(true)}>
-        <span css={labelStyle}>Add new tag</span>
-        <MaterialIcon icon="create" color="white" />
+        <span css={labelStyle}>
+          <div
+            css={`
+              display: flex;
+              align-items: center;
+            `}
+          >
+            <span>Add new</span>
+            <MaterialIcon icon={"add"} color="white" />
+          </div>
+        </span>
       </Button>
       {open && (
         <ModalBase onClose={() => setOpen(false)}>

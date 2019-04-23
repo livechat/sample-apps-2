@@ -12,6 +12,14 @@ const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar {
       display: none;
   }
+
+  body {
+    margin: 0;
+    padding: 0;
+    @import url('https://fonts.googleapis.com/css?family=Roboto');
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
+  }
 `;
 
 const AppWithAuth = () => {
