@@ -22,19 +22,37 @@ const tabStyle = `
 `;
 
 const App = ({ accessToken }) => {
-  const [ratings, setRatings] = useState(null);
+  const [day, setDay] = useState(null);
+  const [week, setWeek] = useState(null);
+  const [month, setMonth] = useState(null);
+  const [year, setYear] = useState(null);
+
   const [times, setTimes] = useState(null);
 
-  const [time, setTime] = useState("week");
+  const [time, setTime] = useState("day");
   const [tabId, setTabId] = useState("ratings");
 
   const [error, setError] = useState(null);
 
-  const fetchRatings = timeInterval =>
+  const fetchDay = () =>
     api
-      .fetchRatings(timeInterval, accessToken)
-      .then(response => setRatings(response.data))
-      .catch(e => console.log(e));
+      .fetchRatings("day", accessToken)
+      .then(response => setDay(response.data));
+
+  const fetchWeek = () =>
+    api
+      .fetchRatings("week", accessToken)
+      .then(response => setWeek(response.data));
+
+  const fetchMonth = () =>
+    api
+      .fetchRatings("month", accessToken)
+      .then(response => setMonth(response.data));
+
+  const fetchYear = () =>
+    api
+      .fetchRatings("year", accessToken)
+      .then(response => setYear(response.data));
 
   const fetchTimes = () =>
     api
@@ -43,9 +61,12 @@ const App = ({ accessToken }) => {
       .catch(e => setError(e));
 
   useEffect(() => {
-    fetchRatings(time);
+    fetchDay();
+    fetchWeek();
+    fetchMonth();
+    fetchYear();
     fetchTimes();
-  }, [time]);
+  }, []);
 
   return (
     <div css={mainConatinerStyle}>
@@ -70,7 +91,16 @@ const App = ({ accessToken }) => {
         </TabsWrapper>
       </div>
       {tabId === "ratings" && (
-        <Ratings ratings={ratings} time={time} setTime={setTime} />
+        <Ratings
+          allRatings={{
+            day,
+            week,
+            month,
+            year
+          }}
+          time={time}
+          setTime={setTime}
+        />
       )}
       {tabId === "times" && (
         <Times times={times} time={time} setTime={setTime} error={error} />

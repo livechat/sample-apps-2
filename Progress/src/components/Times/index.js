@@ -35,6 +35,7 @@ export default ({ ratings, time, setTime, times, error }) => {
             {timeInterval.map((e, i) => {
               return (
                 <Tab
+                  key={i}
                   css={`
                     color: 10px;
                   `}
