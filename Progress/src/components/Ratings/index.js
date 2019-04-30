@@ -17,7 +17,6 @@ import {
 } from "recharts";
 
 import { renderCustomizedLabel } from "../../utils/charts";
-
 import { TabsWrapper, TabsList, Tab, Toast } from "@livechat/design-system";
 
 import Spinner from "../Spinner";
@@ -46,9 +45,11 @@ export default ({ allRatings, time, setTime }) => {
       chats
     };
   });
+
   const allBad = data.reduce((a, b) => a + (b["bad"] || 0), 0);
   const allGood = data.reduce((a, b) => a + (b["good"] || 0), 0);
   const allChats = data.reduce((a, b) => a + (b["chats"] || 0), 0);
+
   return (
     <>
       <div
@@ -117,12 +118,14 @@ export default ({ allRatings, time, setTime }) => {
                             fill="#8884d8"
                             dataKey="value"
                           >
-                            {data.map((entry, index) => (
-                              <Cell
-                                key={`cell-${index}`}
-                                fill={COLORS[index % COLORS.length]}
-                              />
-                            ))}
+                            {data.map((entry, index) => {
+                              return (
+                                <Cell
+                                  key={`cell-${index}`}
+                                  fill={COLORS[index % COLORS.length]}
+                                />
+                              );
+                            })}
                           </Pie>
                         </PieChart>
                       </ResponsiveContainer>

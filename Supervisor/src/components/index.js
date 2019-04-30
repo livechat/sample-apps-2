@@ -49,6 +49,9 @@ const App = ({ accessToken }) => {
   const [tabId, setTabId] = useState("All");
   const [agents, setAgents] = useState([]);
   const [agentsRatings, setAgentsRatings] = useState({});
+  const [agentsAvailability, setAgentsAvailability] = useState({});
+  const [agentsChattingTime, setAgentsChattingTime] = useState({});
+
   const [searchValue, setSearchValue] = useState("");
 
   const fetchAgents = () =>
@@ -57,30 +60,57 @@ const App = ({ accessToken }) => {
   const fetchAgentsRatings = name =>
     api
       .fetchAgentRatings(name, accessToken)
-      .then(response => ({ [name]: response.data }));
+      .then(response => ({ [name]: response.data }))
+      .catch(error => console.log(error));
+
+  const fetchAgentAvailability = name =>
+    api
+      .fetchAgentAvailability(name, accessToken)
+      .then(response => ({ [name]: response.data }))
+      .catch(error => console.log(error));
+
+  const fetchChattingTime = name =>
+    api
+      .fetchChattingTime(name, accessToken)
+      .then(response => ({ [name]: response.data }))
+      .catch(error => console.log(error));
+
+  const arrayToObject = array =>
+    array.reduce((obj, item) => {
+      const key = Object.keys(item)[0];
+      obj[key] = item[key];
+      return obj;
+    }, {});
+
+  const fetchData = (fetching, saving) => {
+    if (agents.length > 0) {
+      const promises = [];
+      agents.forEach(agent => {
+        console.log(agent.name);
+        promises.push(fetching(agent.name));
+      });
+
+      Promise.all(promises).then(ratings => {
+        const ratingsObject = arrayToObject(ratings);
+        saving(ratingsObject);
+      });
+    }
+  };
 
   useEffect(() => {
     fetchAgents();
   }, []);
 
   useEffect(() => {
-    if (agents.length > 0) {
-      const promises = [];
-      agents.forEach(agent => {
-        promises.push(fetchAgentsRatings(agent.name));
-      });
+    fetchData(fetchAgentsRatings, setAgentsRatings);
+  }, [agents]);
 
-      Promise.all(promises).then(ratings => {
-        const arrayToObject = array =>
-          array.reduce((obj, item) => {
-            obj[Object.keys(item)[0]] = item[Object.keys(item)[0]];
-            return obj;
-          }, {});
+  useEffect(() => {
+    fetchData(fetchAgentAvailability, setAgentsAvailability);
+  }, [agents]);
 
-        const ratingsObject = arrayToObject(ratings);
-        setAgentsRatings(ratingsObject);
-      });
-    }
+  useEffect(() => {
+    fetchData(fetchChattingTime, setAgentsChattingTime);
   }, [agents]);
 
   const renderTabs = () =>
@@ -140,7 +170,7 @@ const App = ({ accessToken }) => {
       <Agents
         agents={filteredAgents}
         tabId={tabId}
-        agentsRatings={agentsRatings}
+        data={{ agentsRatings, agentsAvailability, agentsChattingTime }}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 const config = {
-  client_id: "28a8480b033c083b832fad17d5429d77",
+  client_id: "55ab76a60bda531add8663932344f994",
   server_url:
     "https://us-central1-livechat-experiments.cloudfunctions.net/restApi",
   account_url: "https://accounts.livechatinc.com/"

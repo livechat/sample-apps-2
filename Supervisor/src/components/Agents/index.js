@@ -9,6 +9,8 @@ import {
 import MaterialIcon from "material-icons-react";
 import "styled-components/macro";
 import Spinner from "../Spinner";
+import RatingsModal from "./RatingsModal";
+import ChatingModal from "./ChatingModal";
 import WorkingModal from "./WorkingModal";
 
 const ToastStyle = `
@@ -101,10 +103,12 @@ const spaceStyle = area => `
   grid-area: ${area};
 `;
 
-export default ({ agents = [], agentsRatings, tabId }) => {
+export default ({ agents = [], data, tabId }) => {
   if (agents.length <= 0) {
     return <Spinner marginTop="calc(100% - 120px)" />;
   }
+
+  const { agentsRatings, agentsAvailability, agentsChattingTime } = data;
 
   const [modals, setModals] = useState([false, false, false]);
   const [infoTabs, setInfoTabs] = useState(new Array(agents.length));
@@ -118,7 +122,11 @@ export default ({ agents = [], agentsRatings, tabId }) => {
   const renderChart = (type, agentName) => {
     switch (type) {
       case "Working":
-        return <WorkingModal data={agentsRatings[agentName]} />;
+        return <WorkingModal data={agentsAvailability[agentName]} />;
+      case "Chating":
+        return <ChatingModal data={agentsChattingTime[agentName]} />;
+      case "Ratio":
+        return <RatingsModal data={agentsRatings[agentName]} />;
     }
   };
 
@@ -176,7 +184,7 @@ export default ({ agents = [], agentsRatings, tabId }) => {
             <div css={spaceStyle("space")} />
             {["Working", "Chating", "Ratio"].map((e, i) => {
               return (
-                <div>
+                <div key={i}>
                   <Button
                     css={buttonStyle("btn1")}
                     onClick={() => handleModal(i)}

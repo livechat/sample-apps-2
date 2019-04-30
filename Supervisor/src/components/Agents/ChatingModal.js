@@ -8,11 +8,11 @@ import {
   Tooltip
 } from "recharts";
 
-import Spinner from "../Spinner";
 import "styled-components/macro";
+import Spinner from "../Spinner";
 
 export default ({ data }) => {
-  if (!data || Object.keys(data).length === 0) {
+  if (!data) {
     return <Spinner marginTop="calc(100% - 120px)" />;
   }
 
@@ -29,7 +29,7 @@ export default ({ data }) => {
         justify-items: center;
       `}
     >
-      <span>Agent Working Time</span>
+      <span>Agent Chating Time</span>
       <AreaChart
         width={350}
         height={250}
