@@ -53,6 +53,7 @@ const App = ({ accessToken }) => {
   const [agentsChattingTime, setAgentsChattingTime] = useState({});
 
   const [searchValue, setSearchValue] = useState("");
+  const [searching, setSearching] = useState(false);
 
   const fetchAgents = () =>
     api.fetchAgents(accessToken).then(response => setAgents(response.data));
@@ -86,7 +87,6 @@ const App = ({ accessToken }) => {
     if (agents.length > 0) {
       const promises = [];
       agents.forEach(agent => {
-        console.log(agent.name);
         promises.push(fetching(agent.name));
       });
 
@@ -112,6 +112,10 @@ const App = ({ accessToken }) => {
   useEffect(() => {
     fetchData(fetchChattingTime, setAgentsChattingTime);
   }, [agents]);
+
+  useEffect(() => {
+    setSearching(searchValue ? true : false);
+  }, [searchValue]);
 
   const renderTabs = () =>
     tabs.map((tab, i) => {
@@ -164,13 +168,16 @@ const App = ({ accessToken }) => {
         id="search"
         value={searchValue}
         placeholder="Search.."
+        type="text"
         onChange={e => setSearchValue(e.target.value)}
         style={{ width: "100%", borderColor: "hsl(0, 0%, 85%)" }}
+        // disabled={searching ? false : filteredAgents.length <= 0}
       />
       <Agents
         agents={filteredAgents}
         tabId={tabId}
         data={{ agentsRatings, agentsAvailability, agentsChattingTime }}
+        searching={searching}
       />
     </div>
   );

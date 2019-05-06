@@ -21,6 +21,15 @@ export default ({ data }) => {
     hours: data[e].hours
   }));
 
+  const sum = chartData.reduce(
+    (previous, current) =>
+      (current.hours += previous.hours ? previous.hours : 0)
+  );
+  const avg = sum / chartData.length;
+  const longest = chartData.reduce((a, b) => (a.hours > b.hours ? a : b)).hours;
+  const shortest = chartData.reduce((a, b) => (a.hours < b.hours ? a : b))
+    .hours;
+
   return (
     <div
       css={`
@@ -52,6 +61,9 @@ export default ({ data }) => {
           fill="#dbe5ff"
         />
       </AreaChart>
+      <span>Average Time: {avg}</span>
+      <span>Longest Time: {longest}</span>
+      <span>Shortest Time: {shortest}</span>
     </div>
   );
 };

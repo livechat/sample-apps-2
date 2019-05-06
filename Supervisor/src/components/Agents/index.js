@@ -9,7 +9,7 @@ import {
 import MaterialIcon from "material-icons-react";
 import "styled-components/macro";
 import Spinner from "../Spinner";
-import RatingsModal from "./RatingsModal";
+import RatioModal from "./RatioModal";
 import ChatingModal from "./ChatingModal";
 import WorkingModal from "./WorkingModal";
 
@@ -103,9 +103,21 @@ const spaceStyle = area => `
   grid-area: ${area};
 `;
 
-export default ({ agents = [], data, tabId }) => {
-  if (agents.length <= 0) {
+export default ({ agents = [], data, tabId, searching }) => {
+  if (agents.length <= 0 && !searching) {
     return <Spinner marginTop="calc(100% - 120px)" />;
+  }
+
+  if (agents.length <= 0 && searching) {
+    return (
+      <div
+        css={`
+          margin: auto;
+        `}
+      >
+        No results
+      </div>
+    );
   }
 
   const { agentsRatings, agentsAvailability, agentsChattingTime } = data;
@@ -126,7 +138,7 @@ export default ({ agents = [], data, tabId }) => {
       case "Chating":
         return <ChatingModal data={agentsChattingTime[agentName]} />;
       case "Ratio":
-        return <RatingsModal data={agentsRatings[agentName]} />;
+        return <RatioModal data={agentsRatings[agentName]} />;
     }
   };
 
@@ -194,7 +206,7 @@ export default ({ agents = [], data, tabId }) => {
                   {modals[i] && (
                     <ModalBase
                       onClose={() => handleModal(i)}
-                      style={{ width: "600px", height: "400px" }}
+                      style={{ width: "600px", height: "450px" }}
                     >
                       <div style={{ margin: "auto" }}>
                         {renderChart(e, name)}

@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  ResponsiveContainer,
   BarChart,
   Bar,
   XAxis,
