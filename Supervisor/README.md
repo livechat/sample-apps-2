@@ -1,3 +1,4 @@
+![](https://i.ibb.co/J5CxbdT/supervisor-icon.png)
 
 # Supervisor
 
