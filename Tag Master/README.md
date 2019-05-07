@@ -1,4 +1,4 @@
-![](https://i.ibb.co/4mQ3f7G/tag-master-icon.png){ style="display: block; margin: 0 auto" }
+![](https://i.ibb.co/4mQ3f7G/tag-master-icon.png)
 # Tag Master
 
 Simple application that shows how to create Agent App Extension with use of LiveChat Rest Api.
