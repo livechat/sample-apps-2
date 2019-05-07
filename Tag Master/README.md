@@ -8,8 +8,8 @@ Before playing with app you should get familiar with [Tags](https://www.livechat
 
 ## Preview
 
-![Alt Text](https://ibb.co/YTd9KL1)
-![Alt Text](https://ibb.co/f2dqr58)
+![Alt Text](https://i.ibb.co/zH2cL4B/Screen-Shot-2019-05-07-at-15-36-32.png)
+![Alt Text](https://i.ibb.co/QfvpYR8/Screen-Shot-2019-05-07-at-15-36-40.png)
 
 ## How to start?
 
