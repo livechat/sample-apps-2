@@ -27,7 +27,6 @@ const COLORS = ["#d64646", "#4bb678"];
 
 export default ({ allRatings, time, setTime }) => {
   const [tabId, setTabId] = useState(time);
-
   const ratings = allRatings[time];
 
   if (!ratings) {
@@ -39,7 +38,7 @@ export default ({ allRatings, time, setTime }) => {
   const data = ratingsTab.map((rating, index) => {
     const { good, bad, chats } = rating;
     return {
-      name: hours[index],
+      name: hours[index].substr(5),
       good,
       bad,
       chats

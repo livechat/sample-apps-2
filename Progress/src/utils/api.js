@@ -2,18 +2,16 @@ import config from "./config";
 import axios from "axios";
 
 const GET = "GET";
-const POST = "post";
-const PUT = "put";
-const DELETE = "delete";
 
 const { server_url } = config;
 
-const createApiRequest = (method, route, accessToken, data) =>
+const createApiRequest = (method, route, accessToken, data, interval) =>
   axios({
     method,
     url: server_url + route,
     headers: {
       Authorization: "Bearer " + accessToken,
+      DateInterval: interval,
       "X-API-Version": "2"
     },
     data
@@ -24,7 +22,10 @@ const createApiRequest = (method, route, accessToken, data) =>
 const api = {
   fetchRatings: (interval, accessToken) =>
     createApiRequest(GET, `/ratings/${interval}`, accessToken),
-  fetchTimes: accessToken => createApiRequest(GET, `/responses`, accessToken)
+  fetchResponseTimes: (interval, accessToken) =>
+    createApiRequest(GET, `/responses`, accessToken, null, interval),
+  fetchChattingTimes: (interval, accessToken) =>
+    createApiRequest(GET, `/chatting`, accessToken, null, interval)
 };
 
 export default api;

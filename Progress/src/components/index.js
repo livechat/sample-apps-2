@@ -22,50 +22,87 @@ const tabStyle = `
 `;
 
 const App = ({ accessToken }) => {
-  const [day, setDay] = useState(null);
-  const [week, setWeek] = useState(null);
-  const [month, setMonth] = useState(null);
-  const [year, setYear] = useState(null);
+  const [dayRating, setDayRating] = useState(null);
+  const [weekRating, setWeekRating] = useState(null);
+  const [monthRating, setMonthRating] = useState(null);
+  const [yearRating, setYearRating] = useState(null);
 
-  const [times, setTimes] = useState(null);
+  const [dayResponse, setDayResponse] = useState(null);
+  const [weekResponse, setWeekResponse] = useState(null);
+  const [monthResponse, setMonthResponse] = useState(null);
+  // const [yearRating, setYearRating] = useState(null);
 
-  const [time, setTime] = useState("day");
+  const [dayChatting, setDayChatting] = useState(null);
+  const [weekChatting, setWeekChatting] = useState(null);
+  const [monthChatting, setMonthChatting] = useState(null);
+
+  const [responseInterval, setResponseInterval] = useState("day");
+  const [timeInterval, setTimeInterval] = useState("day");
   const [tabId, setTabId] = useState("ratings");
 
   const [error, setError] = useState(null);
 
-  const fetchDay = () =>
+  const fetchDayRating = () =>
     api
       .fetchRatings("day", accessToken)
-      .then(response => setDay(response.data));
+      .then(response => setDayRating(response.data));
 
-  const fetchWeek = () =>
+  const fetchWeekRating = () =>
     api
       .fetchRatings("week", accessToken)
-      .then(response => setWeek(response.data));
+      .then(response => setWeekRating(response.data));
 
-  const fetchMonth = () =>
+  const fetchMonthRating = () =>
     api
       .fetchRatings("month", accessToken)
-      .then(response => setMonth(response.data));
+      .then(response => setMonthRating(response.data));
 
-  const fetchYear = () =>
+  const fetchYearRating = () =>
     api
       .fetchRatings("year", accessToken)
-      .then(response => setYear(response.data));
+      .then(response => setYearRating(response.data));
 
-  const fetchTimes = () =>
+  const fetchDayResponse = () =>
     api
-      .fetchTimes(accessToken)
-      .then(response => setTimes(response.data))
-      .catch(e => setError(e));
+      .fetchResponseTimes(0, accessToken)
+      .then(response => setDayResponse(response.data));
+
+  const fetchWeekResponse = () =>
+    api
+      .fetchResponseTimes(1, accessToken)
+      .then(response => setWeekResponse(response.data));
+
+  const fetchMonthResponse = () =>
+    api
+      .fetchResponseTimes(2, accessToken)
+      .then(response => setMonthResponse(response.data));
+
+  const fetchDayChatting = () =>
+    api
+      .fetchChattingTimes(0, accessToken)
+      .then(response => setDayChatting(response.data));
+
+  const fetchWeekChatting = () =>
+    api
+      .fetchChattingTimes(1, accessToken)
+      .then(response => setWeekChatting(response.data));
+
+  const fetchMonthChatting = () =>
+    api
+      .fetchChattingTimes(2, accessToken)
+      .then(response => setMonthChatting(response.data));
 
   useEffect(() => {
-    fetchDay();
-    fetchWeek();
-    fetchMonth();
-    fetchYear();
-    fetchTimes();
+    fetchDayRating();
+    fetchWeekRating();
+    fetchMonthRating();
+    fetchYearRating();
+    fetchDayResponse();
+    fetchWeekResponse();
+    fetchMonthResponse();
+    fetchDayChatting();
+    fetchWeekChatting();
+    fetchMonthChatting();
   }, []);
 
   return (
@@ -93,17 +130,31 @@ const App = ({ accessToken }) => {
       {tabId === "ratings" && (
         <Ratings
           allRatings={{
-            day,
-            week,
-            month,
-            year
+            day: dayRating,
+            week: weekRating,
+            month: monthRating,
+            year: yearRating
           }}
-          time={time}
-          setTime={setTime}
+          time={responseInterval}
+          setTime={setResponseInterval}
         />
       )}
       {tabId === "times" && (
-        <Times times={times} time={time} setTime={setTime} error={error} />
+        <Times
+          allResponse={{
+            day: dayResponse,
+            week: weekResponse,
+            month: monthResponse
+          }}
+          allChatting={{
+            day: dayChatting,
+            week: weekChatting,
+            month: monthChatting
+          }}
+          time={timeInterval}
+          setTime={setTimeInterval}
+          error={error}
+        />
       )}
     </div>
   );

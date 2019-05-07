@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import { TabsWrapper, TabsList, Tab, Toast } from "@livechat/design-system";
+import ChattingModal from "./ChatingModal";
+import ResponseModal from "./ResponseModal";
 
 import Spinner from "../Spinner";
 import "styled-components/macro";
 
-const timeInterval = ["day", "week", "month", "year"];
+const tabWithTimeInterval = ["day", "week", "month"];
 
-export default ({ ratings, time, setTime, times, error }) => {
-  const [tabId, setTabId] = useState("week");
+export default ({ allResponse, allChatting, setTime, time, error }) => {
+  const [tabId, setTabId] = useState(time);
 
   if (error) {
     return <Toast variant="error">Section only for enterprise clients.</Toast>;
   }
 
-  if (!ratings) {
+  if (!allResponse || !allChatting) {
     return <Spinner marginTop="calc(100% - 50px)" />;
   }
+
+  const response = allResponse[time];
+  const chatting = allChatting[time];
 
   return (
     <>
@@ -23,7 +28,7 @@ export default ({ ratings, time, setTime, times, error }) => {
         css={`
           background-color: white;
           border: solid 1px hsl(0, 0%, 90%);
-          padding-bottom: 20px;
+          margin-bottom: 20px;
         `}
       >
         <TabsWrapper
@@ -32,7 +37,7 @@ export default ({ ratings, time, setTime, times, error }) => {
           `}
         >
           <TabsList>
-            {timeInterval.map((e, i) => {
+            {tabWithTimeInterval.map((e, i) => {
               return (
                 <Tab
                   key={i}
@@ -52,6 +57,8 @@ export default ({ ratings, time, setTime, times, error }) => {
             })}
           </TabsList>
         </TabsWrapper>
+        <ChattingModal data={chatting} time={time} />
+        <ResponseModal data={response} />
       </div>
     </>
   );
