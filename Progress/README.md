@@ -1,3 +1,5 @@
+![](https://i.ibb.co/Ks6jZc1/progress-icon.png)
+
 #  Progress
 
 Simple application that shows how to create Agent App Extension with use of LiveChat Rest Api.
