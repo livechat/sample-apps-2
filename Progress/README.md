@@ -22,7 +22,7 @@ In widget you can find statistics about:
 In order to use this application in your LiveChat dashboard,
 
 first of all you have to create your own app in [Developers Console](https://developers.livechatinc.com/console)
-and get `Client Id`.
+and get **Client Id**.
 
 To do so:
 1. Go to [apps](https://developers.livechatinc.com/console/apps)
