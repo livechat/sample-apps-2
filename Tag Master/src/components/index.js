@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { TabsWrapper, TabsList, Tab } from "@livechat/design-system";
 import "styled-components/macro";
-import MaterialIcon from "material-icons-react";
 
 import Tags from "./Tags";
-import Cans from "./Cans";
+import Cans from "./Cans/index";
 
 import api from "../utils/api";
 
@@ -20,6 +19,16 @@ const mainConatinerStyle = `
 const tabStyle = `
   background-color: white;
   border: solid 1px hsl(0, 0%, 90%);
+`;
+
+const labelStyle = `
+  display: flex;
+  align-items: center;
+`;
+
+const iconStyle = `
+  width: 12px;
+  margin: 5px;
 `;
 
 const App = ({ accessToken }) => {
@@ -47,19 +56,8 @@ const App = ({ accessToken }) => {
               key={"tags"}
               isSelected={"tags" === tabId}
             >
-              <div
-                css={`
-                  display: flex;
-                  align-items: center;
-                `}
-              >
-                <img
-                  src="/icons/hash.png"
-                  css={`
-                    width: 12px;
-                    margin: 5px;
-                  `}
-                />
+              <div css={labelStyle}>
+                <img src="/icons/hash.png" css={iconStyle} />
                 <span>Tags</span>
               </div>
             </Tab>
@@ -68,19 +66,8 @@ const App = ({ accessToken }) => {
               key={"cans"}
               isSelected={"cans" === tabId}
             >
-              <div
-                css={`
-                  display: flex;
-                  align-items: center;
-                `}
-              >
-                <img
-                  src="/icons/can.png"
-                  css={`
-                    width: 12px;
-                    margin: 5px;
-                  `}
-                />
+              <div css={labelStyle}>
+                <img src="/icons/can.png" css={iconStyle} />
                 <span>Cans</span>
               </div>
             </Tab>

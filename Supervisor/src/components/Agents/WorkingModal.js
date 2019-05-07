@@ -11,6 +11,12 @@ import {
 import Spinner from "../Spinner";
 import "styled-components/macro";
 
+const containerStyle = `
+  display: grid;
+  grid-gap: 20px;
+  justify-items: center;
+`;
+
 export default ({ data }) => {
   if (!data || Object.keys(data).length === 0) {
     return <Spinner marginTop="calc(100% - 120px)" />;
@@ -25,19 +31,13 @@ export default ({ data }) => {
     (previous, current) =>
       (current.hours += previous.hours ? previous.hours : 0)
   );
-  const avg = sum / chartData.length;
+  const average = sum / chartData.length;
   const longest = chartData.reduce((a, b) => (a.hours > b.hours ? a : b)).hours;
   const shortest = chartData.reduce((a, b) => (a.hours < b.hours ? a : b))
     .hours;
 
   return (
-    <div
-      css={`
-        display: grid;
-        grid-gap: 20px;
-        justify-items: center;
-      `}
-    >
+    <div css={containerStyle}>
       <span>Agent Working Time</span>
       <AreaChart
         width={350}
@@ -61,7 +61,7 @@ export default ({ data }) => {
           fill="#dbe5ff"
         />
       </AreaChart>
-      <span>Average Time: {avg}</span>
+      <span>Average Time: {average}</span>
       <span>Longest Time: {longest}</span>
       <span>Shortest Time: {shortest}</span>
     </div>

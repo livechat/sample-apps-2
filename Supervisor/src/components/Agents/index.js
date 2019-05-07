@@ -103,21 +103,17 @@ const spaceStyle = area => `
   grid-area: ${area};
 `;
 
+const noResultsStyle = `
+  margin: auto;
+`;
+
 export default ({ agents = [], data, tabId, searching }) => {
   if (agents.length <= 0 && !searching) {
     return <Spinner marginTop="calc(100% - 120px)" />;
   }
 
   if (agents.length <= 0 && searching) {
-    return (
-      <div
-        css={`
-          margin: auto;
-        `}
-      >
-        No results
-      </div>
-    );
+    return <div css={noResultsStyle}>No results</div>;
   }
 
   const { agentsRatings, agentsAvailability, agentsChattingTime } = data;
@@ -165,7 +161,6 @@ export default ({ agents = [], data, tabId, searching }) => {
         >
           <img src={`https://${avatar}`} css={AvaratStyle(status)} />
           <span css={NameStyle}>{name}</span>
-
           <span css={InfoButtonStyle}>
             <MaterialIcon icon="information" color="#4384f5" />
           </span>
@@ -193,6 +188,7 @@ export default ({ agents = [], data, tabId, searching }) => {
               )}
               <span>{status}</span>
             </span>
+
             <div css={spaceStyle("space")} />
             {["Working", "Chating", "Ratio"].map((e, i) => {
               return (

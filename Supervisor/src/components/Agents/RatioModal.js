@@ -12,6 +12,12 @@ import {
 import Spinner from "../Spinner";
 import "styled-components/macro";
 
+const conatinerStyle = `
+  display: grid;
+  grid-gap: 20px;
+  justify-items: center;
+`;
+
 export default ({ data }) => {
   if (!data || Object.keys(data).length === 0) {
     return <Spinner marginTop="calc(100% - 120px)" />;
@@ -31,13 +37,7 @@ export default ({ data }) => {
   const allChats = sum("chats");
 
   return (
-    <div
-      css={`
-        display: grid;
-        grid-gap: 20px;
-        justify-items: center;
-      `}
-    >
+    <div css={conatinerStyle}>
       <span>Agent Ratings</span>
       <BarChart
         width={350}

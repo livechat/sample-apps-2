@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import {
   BarChart,
   LineChart,
@@ -12,8 +12,7 @@ import {
   Line,
   ResponsiveContainer,
   PieChart,
-  Pie,
-  Sector
+  Pie
 } from "recharts";
 
 import { renderCustomizedLabel } from "../../utils/charts";
@@ -24,6 +23,59 @@ import "styled-components/macro";
 
 const timeInterval = ["day", "week", "month", "year"];
 const COLORS = ["#d64646", "#4bb678"];
+
+const containerStyle = allChats => `
+  background-color: white;
+  border: solid 1px hsl(0, 0%, 90%);
+  ${allChats > 0 && "padding-bottom: 40px;"}
+`;
+
+const tabStyle = `
+  color: 10px;
+`;
+
+const pieChartStyle = `
+  display: grid;
+  grid-template: "a b" 220px / 2fr 1fr;
+  align-items: center;
+  justify-items: center;
+  border-top: solid 1px hsl(0, 0%, 90%);
+`;
+
+const lenendStyle = `
+  justify-self: start;
+  > div {
+    width: 15px;
+    height: 15px;
+    border-radius: 10px;
+    margin: 7px;
+  }
+  > span {
+    font-size: 13px;
+  }
+`;
+
+const goodStyle = `
+  background-color: #4bb678;
+`;
+
+const badStyle = `
+  background-color: #d64646;
+`;
+
+const barChartStyle = `
+  width: 100%;
+  height: 300px;
+  .recharts-rectangle:first {
+    fill: red;
+  }
+`;
+
+const lineChartStyle = ` 
+  width: 100%; 
+  height: 300px; 
+  marginTop: 50px 
+`;
 
 export default ({ allRatings, time, setTime }) => {
   const [tabId, setTabId] = useState(time);
@@ -51,13 +103,7 @@ export default ({ allRatings, time, setTime }) => {
 
   return (
     <>
-      <div
-        css={`
-          background-color: white;
-          border: solid 1px hsl(0, 0%, 90%);
-          ${allChats > 0 && "padding-bottom: 40px;"}
-        `}
-      >
+      <div css={containerStyle(allChats)}>
         <TabsWrapper
           css={`
             overflow-y: scroll;
@@ -68,9 +114,7 @@ export default ({ allRatings, time, setTime }) => {
               return (
                 <Tab
                   key={i}
-                  css={`
-                    color: 10px;
-                  `}
+                  css={tabStyle}
                   onSelect={() => {
                     setTabId(e);
                     setTime(e);
@@ -95,15 +139,7 @@ export default ({ allRatings, time, setTime }) => {
               >
                 {allBad + allGood > 0 ? (
                   <div>
-                    <div
-                      css={`
-                        display: grid;
-                        grid-template: "a b" 220px / 2fr 1fr;
-                        align-items: center;
-                        justify-items: center;
-                        border-top: solid 1px hsl(0, 0%, 90%);
-                      `}
-                    >
+                    <div css={pieChartStyle}>
                       <ResponsiveContainer>
                         <PieChart width={50} height={50}>
                           <Pie
@@ -128,31 +164,10 @@ export default ({ allRatings, time, setTime }) => {
                           </Pie>
                         </PieChart>
                       </ResponsiveContainer>
-                      <div
-                        css={`
-                          justify-self: start;
-                          > div {
-                            width: 15px;
-                            height: 15px;
-                            border-radius: 10px;
-                            margin: 7px;
-                          }
-                          > span {
-                            font-size: 13px;
-                          }
-                        `}
-                      >
-                        <div
-                          css={`
-                            background-color: #4bb678;
-                          `}
-                        />
+                      <div css={lenendStyle}>
+                        <div css={goodStyle} />
                         <span>good</span>
-                        <div
-                          css={`
-                            background-color: #d64646;
-                          `}
-                        />
+                        <div css={badStyle} />
                         <span>bad</span>
                       </div>
                     </div>
@@ -162,15 +177,7 @@ export default ({ allRatings, time, setTime }) => {
                 )}
               </div>
             </div>
-            <div
-              css={`
-                width: 100%;
-                height: 300px;
-                .recharts-rectangle:first {
-                  fill: red;
-                }
-              `}
-            >
+            <div css={barChartStyle}>
               <ResponsiveContainer>
                 <BarChart
                   data={[
@@ -188,7 +195,7 @@ export default ({ allRatings, time, setTime }) => {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div style={{ width: "100%", height: 300, marginTop: "50px" }}>
+            <div css={lineChartStyle}>
               <ResponsiveContainer>
                 <LineChart data={data} margin={{ right: 40 }}>
                   <CartesianGrid strokeDasharray="3 3" />

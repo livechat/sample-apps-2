@@ -26,10 +26,6 @@ const tabsStyle = `
   border: solid 1px hsl(0, 0%, 90%);
 `;
 
-const searchStyle = `
-  width: 100%;
-`;
-
 const tabStyle = `
   display: flex;
   align-items: center;
@@ -47,6 +43,7 @@ const tabs = [
 
 const App = ({ accessToken }) => {
   const [tabId, setTabId] = useState("All");
+
   const [agents, setAgents] = useState([]);
   const [agentsRatings, setAgentsRatings] = useState({});
   const [agentsAvailability, setAgentsAvailability] = useState({});
@@ -61,20 +58,17 @@ const App = ({ accessToken }) => {
   const fetchAgentsRatings = name =>
     api
       .fetchAgentRatings(name, accessToken)
-      .then(response => ({ [name]: response.data }))
-      .catch(error => console.log(error));
+      .then(response => ({ [name]: response.data }));
 
   const fetchAgentAvailability = name =>
     api
       .fetchAgentAvailability(name, accessToken)
-      .then(response => ({ [name]: response.data }))
-      .catch(error => console.log(error));
+      .then(response => ({ [name]: response.data }));
 
   const fetchChattingTime = name =>
     api
       .fetchChattingTime(name, accessToken)
-      .then(response => ({ [name]: response.data }))
-      .catch(error => console.log(error));
+      .then(response => ({ [name]: response.data }));
 
   const arrayToObject = array =>
     array.reduce((obj, item) => {
@@ -171,7 +165,6 @@ const App = ({ accessToken }) => {
         type="text"
         onChange={e => setSearchValue(e.target.value)}
         style={{ width: "100%", borderColor: "hsl(0, 0%, 85%)" }}
-        // disabled={searching ? false : filteredAgents.length <= 0}
       />
       <Agents
         agents={filteredAgents}
