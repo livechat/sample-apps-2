@@ -14,7 +14,7 @@ In widget you can find statistics about:
 ##  Preview
 
 
-![Alt Text]()
+![Alt Text](https://i.ibb.co/k6XdhJ9/progress.png)
 
 
 ## How to start?
