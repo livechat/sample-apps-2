@@ -66,6 +66,7 @@ const badStyle = `
 const barChartStyle = `
   width: 100%;
   height: 300px;
+  margin-bottom: 40px;
   .recharts-rectangle:first {
     fill: red;
   }
@@ -90,13 +91,12 @@ export default ({ allRatings, time, setTime }) => {
   const data = ratingsTab.map((rating, index) => {
     const { good, bad, chats } = rating;
     return {
-      name: hours[index].substr(5),
+      name: time === "day" ? hours[index] : hours[index].substr(5),
       good,
       bad,
       chats
     };
   });
-
   const allBad = data.reduce((a, b) => a + (b["bad"] || 0), 0);
   const allGood = data.reduce((a, b) => a + (b["good"] || 0), 0);
   const allChats = data.reduce((a, b) => a + (b["chats"] || 0), 0);

@@ -22,7 +22,6 @@ export default ({ data }) => {
   if (!data || Object.keys(data).length === 0) {
     return <Spinner marginTop="calc(100% - 120px)" />;
   }
-
   const newData = Object.keys(data).map(e => ({
     day: e,
     good: data[e].good,

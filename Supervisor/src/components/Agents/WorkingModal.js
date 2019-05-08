@@ -26,7 +26,6 @@ export default ({ data }) => {
     name: e.substr(5),
     hours: data[e].hours
   }));
-
   const sum = chartData.reduce(
     (previous, current) =>
       (current.hours += previous.hours ? previous.hours : 0)

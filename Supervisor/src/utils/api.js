@@ -4,8 +4,8 @@ import axios from "axios";
 const GET = "GET";
 const { server_url } = config;
 
-const createApiRequest = (method, route, accessToken, name) =>
-  axios({
+const createApiRequest = (method, route, accessToken, name) => {
+  return axios({
     method,
     url: server_url + route,
     headers: {
@@ -17,6 +17,7 @@ const createApiRequest = (method, route, accessToken, name) =>
   }).catch(function(error) {
     console.error(error);
   });
+};
 
 const api = {
   fetchAgents: accessToken => createApiRequest(GET, "/agents", accessToken),
