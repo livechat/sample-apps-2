@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   BarChart,
-  LineChart,
   Bar,
   Cell,
   CartesianGrid,
@@ -9,7 +8,6 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  Line,
   ResponsiveContainer,
   PieChart,
   Pie
@@ -197,15 +195,20 @@ export default ({ allRatings, time, setTime }) => {
             </div>
             <div css={lineChartStyle}>
               <ResponsiveContainer>
-                <LineChart data={data} margin={{ right: 40 }}>
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={data}
+                  margin={{ right: 40 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line dataKey="good" stroke="#4bb678" />
-                  <Line dataKey="bad" stroke="#d64646" />
-                </LineChart>
+                  <Bar dataKey="good" fill="#4bb678" />
+                  <Bar dataKey="bad" fill="#d64646" />
+                </BarChart>
               </ResponsiveContainer>
             </div>
           </div>

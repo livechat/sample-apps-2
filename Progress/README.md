@@ -1,18 +1,66 @@
-## Sample apps
+![](https://i.ibb.co/Ks6jZc1/progress-icon.png)
 
-Sample apps will help you to get familliar with [LiveChat Rest API](<(https://docs.livechatinc.com/rest-api/)>) and [Agent App Widgets](https://docs.livechatinc.com/agent-app-widgets/).
+# Progress
 
-Current list of samples apps:
+**Progress** is a simple app that creates reports based on data from chats. It can display the daily, weekly, monthly, and annual statistics.
 
-- [Tag Master](https://github.com/livechat/sample-apps/tree/master/tag-master) - widget for helping your agents with managing tags and canned responses.
-- [Progress](https://github.com/livechat/sample-apps/tree/master/progress) - widget for helping you monitoring statistics of your team, such as: chat ratings, response times and chatting times.
-- [Supervisor](https://github.com/livechat/sample-apps/tree/master/supervisor) - widget for helping you to monitor weekly progress of your agents and also their availability.
-- [Good To Know](https://github.com/livechat/sample-apps/tree/master/good-to-know) - widget for displaying basic information about visitors on your page.
-- [Feature Request](https://github.com/livechat/sample-apps/tree/master/feature-request) - widget for taking all your clients information about new features they would like to see on your website.
-- [Bug Report](https://github.com/livechat/sample-apps/tree/master/bug-report) - widget for taking all your clients information about bugs and errors they found on your website.
+It shows the following information:
 
-In source code you can find code for **Authorization** and **data fetching** from our server.
+- **Ratings**
+- **Chatting time**
+- [Response Time](https://docs.livechatinc.com/rest-api/#chats-first-response-time)
 
-If you found any bugs or you have problem with implementing code on your own, please create issue on this repo.
+# Preview
+
+![Alt Text](https://i.ibb.co/k6XdhJ9/progress.png)
+
+# App setup
+
+## Before you start
+
+To use this application in your LiveChat dashboard, you'll need to create your own app in [Developers Console](https://developers.livechatinc.com/console) and get your **Client Id**.
+
+## Getting started
+
+1. Go to [Apps](https://developers.livechatinc.com/console/apps) in [Developers Console](https://developers.livechatinc.com/console).
+2. Click **New App** and give it an **App Name**.
+3. Select _Agent App Widget_ as the **App Template**.
+4. Go to **Develop -> Building Blocks**.
+5. Add **App Authorization** and mark it as _JavaScript App_. Your **Client Id** will be displayed there.
+6. Fetch the **Progress** app repository.
+7. In the app directory, do the following steps :
+
+   - Install dependencies (`npm install`).
+   - In your project, go to `src/utils/congif.js` and replace `client_id` with your own **Client Id** (the one from **Step 5**).
+   - Run your app (`npm start`).
+
+8. Add your app url (for example: `https://localhost:3000`) in these two locations:
+
+   - **Redirect URI whitelist**
+   - **Agent App Widgets**
+
+9. In **Private installation**, click **Install app**.
+
+You should now be able to use **Progress** with LiveChat.
+
+# How it works
+
+[Agent App Widgets](https://docs.livechatinc.com/agent-app-widgets/) are web applications loaded inside the LiveChat Agent App. All agents can interact with the widget during chats with customers. The widget itself is displayed in the Agent’s App right sidebar.
+
+To get information such as tags and canned responses, you need to use [LiveChat Rest API](https://docs.livechatinc.com/rest-api/).
+
+In order to pull data from our server, Rest API requires you to include an **access_token** in all the requests. You can get it using [LiveChat Boilerplate](https://docs.livechatinc.com/boilerplate/) and [JavaScript Widget API](https://docs.livechatinc.com/agent-app-widgets/#javascript-api).
+
+You should also get familiar with [Authorization](https://docs.livechatinc.com/authorization/).
+
+# Feedback
+
+If you find some bugs, please create an issue in this repo. We will try to fix is ASAP ;)
+
+# If you're new to LiveChat
+
+**LiveChat** is an online customer service software with live support, help desk software, and web analytics capabilities. It's used by more than 27,000 companies all over the world. For more info, check out [LiveChat for Developers](https://developers.livechatinc.com/).
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

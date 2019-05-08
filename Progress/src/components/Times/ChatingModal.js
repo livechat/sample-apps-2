@@ -27,16 +27,6 @@ export default ({ data, time }) => {
           hours: data[e].hours
         }));
 
-  // const chartData = [
-  //   { name: "04-30", hours: 0 },
-  //   { name: "05-01", hours: 4 },
-  //   { name: "05-02", hours: 5 },
-  //   { name: "05-03", hours: 2 },
-  //   { name: "05-04", hours: 0 },
-  //   { name: "05-05", hours: 0 },
-  //   { name: "05-06", hours: 8 },
-  //   { name: "05-07", hours: 0 }
-  // ];
   return (
     <div
       css={`
@@ -44,6 +34,7 @@ export default ({ data, time }) => {
         padding: 30px;
         grid-gap: 20px;
         justify-items: center;
+        border-top: solid 1px hsl(0, 0%, 90%);
       `}
     >
       <span>Chatting Time</span>

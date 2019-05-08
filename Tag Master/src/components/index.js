@@ -8,6 +8,8 @@ import Cans from "./Cans/index";
 import api from "../utils/api";
 
 const mainConatinerStyle = `
+  margin-left: auto;
+  margin-right: auto;
   height: 100%;
   display: grid;
   grid-gap: 10px;

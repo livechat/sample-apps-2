@@ -31,19 +31,12 @@ export default ({ allResponse, allChatting, setTime, time, error }) => {
           margin-bottom: 20px;
         `}
       >
-        <TabsWrapper
-          css={`
-            width: 200px !important;
-          `}
-        >
+        <TabsWrapper>
           <TabsList>
             {tabWithTimeInterval.map((e, i) => {
               return (
                 <Tab
                   key={i}
-                  css={`
-                    color: 10px;
-                  `}
                   onSelect={() => {
                     setTabId(e);
                     setTime(e);

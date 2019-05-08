@@ -12,6 +12,8 @@ import api from "../utils/api";
 import Agents from "./Agents/index";
 
 const mainConatinerStyle = `
+  margin-left: auto;
+  margin-right: auto;
   height: 100%;
   display: grid;
   grid-template-rows: 50px 40px auto;
