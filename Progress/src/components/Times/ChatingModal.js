@@ -7,13 +7,39 @@ import {
   CartesianGrid,
   Tooltip
 } from "recharts";
-
+import { Toast } from "@livechat/design-system";
 import "styled-components/macro";
 import Spinner from "../Spinner";
 
 export default ({ data, time }) => {
+  if (data && data.status === 403) {
+    return (
+      <div
+        css={`
+          display: grid;
+          padding: 30px;
+          grid-gap: 20px;
+          justify-items: center;
+        `}
+      >
+        <span>Chatting Time</span>
+        <Toast
+          variant="info"
+          css={`
+            width: 100%;
+          `}
+        >
+          Only for enterprise customers.
+        </Toast>
+        <span href="https://my.livechatinc.com/subscription" target="_blank">
+          check our offer
+        </span>
+      </div>
+    );
+  }
+
   if (!data) {
-    return <Spinner marginTop="calc(100% - 120px)" />;
+    return <Spinner marginTop="200px" />;
   }
 
   const chartData =
