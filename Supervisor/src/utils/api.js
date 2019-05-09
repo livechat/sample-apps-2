@@ -4,15 +4,15 @@ import axios from "axios";
 const GET = "GET";
 const { server_url } = config;
 
-const createApiRequest = (method, route, accessToken, name) => {
+const createApiRequest = (method, route, accessToken, login) => {
   return axios({
     method,
     url: server_url + route,
     headers: {
       Authorization: "Bearer " + accessToken,
       DateInterval: 1,
-      Agent: name,
-      "X-API-Version": "2"
+      "X-API-Version": "2",
+      Agent: login
     }
   }).catch(function(error) {
     console.error(error);
@@ -21,12 +21,12 @@ const createApiRequest = (method, route, accessToken, name) => {
 
 const api = {
   fetchAgents: accessToken => createApiRequest(GET, "/agents", accessToken),
-  fetchAgentRatings: (name, accessToken) =>
-    createApiRequest(GET, "/ratings/week", accessToken, name),
-  fetchAgentAvailability: (name, accessToken) =>
-    createApiRequest(GET, "/availability", accessToken, name),
-  fetchChattingTime: (name, accessToken) =>
-    createApiRequest(GET, "/chatting", accessToken, name)
+  fetchAgentRatings: (login, accessToken) =>
+    createApiRequest(GET, "/ratings/week", accessToken, login),
+  fetchAgentAvailability: (login, accessToken) =>
+    createApiRequest(GET, "/availability", accessToken, login),
+  fetchChattingTime: (login, accessToken) =>
+    createApiRequest(GET, "/chatting", accessToken, login)
 };
 
 export default api;

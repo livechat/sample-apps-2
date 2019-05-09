@@ -47,9 +47,6 @@ const App = ({ accessToken }) => {
   const [tabId, setTabId] = useState("All");
 
   const [agents, setAgents] = useState([]);
-  const [agentsRatings, setAgentsRatings] = useState({});
-  const [agentsAvailability, setAgentsAvailability] = useState({});
-  const [agentsChattingTime, setAgentsChattingTime] = useState({});
 
   const [searchValue, setSearchValue] = useState("");
   const [searching, setSearching] = useState(false);
@@ -57,57 +54,9 @@ const App = ({ accessToken }) => {
   const fetchAgents = () =>
     api.fetchAgents(accessToken).then(response => setAgents(response.data));
 
-  const fetchAgentsRatings = name =>
-    api
-      .fetchAgentRatings(name, accessToken)
-      .then(response => ({ [name]: response.data }));
-
-  const fetchAgentAvailability = name =>
-    api
-      .fetchAgentAvailability(name, accessToken)
-      .then(response => ({ [name]: response.data }));
-
-  const fetchChattingTime = name =>
-    api
-      .fetchChattingTime(name, accessToken)
-      .then(response => ({ [name]: response.data }));
-
-  const arrayToObject = array =>
-    array.reduce((obj, item) => {
-      const key = Object.keys(item)[0];
-      obj[key] = item[key];
-      return obj;
-    }, {});
-
-  const fetchData = (fetching, saving) => {
-    if (agents.length > 0) {
-      const promises = [];
-      agents.forEach(agent => {
-        promises.push(fetching(agent.name));
-      });
-
-      Promise.all(promises).then(ratings => {
-        const ratingsObject = arrayToObject(ratings);
-        saving(ratingsObject);
-      });
-    }
-  };
-
   useEffect(() => {
     fetchAgents();
   }, []);
-
-  useEffect(() => {
-    fetchData(fetchAgentsRatings, setAgentsRatings);
-  }, [agents]);
-
-  useEffect(() => {
-    fetchData(fetchAgentAvailability, setAgentsAvailability);
-  }, [agents]);
-
-  useEffect(() => {
-    fetchData(fetchChattingTime, setAgentsChattingTime);
-  }, [agents]);
 
   useEffect(() => {
     setSearching(searchValue ? true : false);
@@ -171,8 +120,8 @@ const App = ({ accessToken }) => {
       <Agents
         agents={filteredAgents}
         tabId={tabId}
-        data={{ agentsRatings, agentsAvailability, agentsChattingTime }}
         searching={searching}
+        accessToken={accessToken}
       />
     </div>
   );
