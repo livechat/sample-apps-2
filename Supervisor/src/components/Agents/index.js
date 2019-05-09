@@ -159,7 +159,10 @@ export default ({ agents = [], data, tabId, searching }) => {
             setInfoTabs(newInfoTabs);
           }}
         >
-          <img src={`https://${avatar}`} css={AvaratStyle(status)} />
+          <img
+            src={avatar.includes("https") ? avatar : `https://${avatar}`}
+            css={AvaratStyle(status)}
+          />
           <span css={NameStyle}>{name}</span>
           <span css={InfoButtonStyle}>
             <MaterialIcon icon="information" color="#4384f5" />
