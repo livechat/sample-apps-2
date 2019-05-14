@@ -31,9 +31,6 @@ export default ({ data, time }) => {
         >
           Only for enterprise customers.
         </Toast>
-        <span href="https://my.livechatinc.com/subscription" target="_blank">
-          check our offer
-        </span>
       </div>
     );
   }

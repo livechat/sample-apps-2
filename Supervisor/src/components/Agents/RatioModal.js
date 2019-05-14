@@ -52,7 +52,6 @@ export default ({ data }) => {
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
-        <Legend />
         <Bar dataKey="number" fill="#4384f5" />
       </BarChart>
     </div>

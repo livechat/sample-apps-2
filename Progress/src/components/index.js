@@ -32,7 +32,6 @@ const App = ({ accessToken }) => {
   const [dayResponse, setDayResponse] = useState(null);
   const [weekResponse, setWeekResponse] = useState(null);
   const [monthResponse, setMonthResponse] = useState(null);
-  // const [yearRating, setYearRating] = useState(null);
 
   const [dayChatting, setDayChatting] = useState(null);
   const [weekChatting, setWeekChatting] = useState(null);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
   TabsWrapper,
   TabsList,
@@ -43,16 +43,36 @@ const tabs = [
   { title: "Offline", icon: "not_interested" }
 ];
 
+const useInterval = (callback, delay) => {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+};
+
 const App = ({ accessToken }) => {
   const [tabId, setTabId] = useState("All");
-
   const [agents, setAgents] = useState([]);
-
   const [searchValue, setSearchValue] = useState("");
   const [searching, setSearching] = useState(false);
 
   const fetchAgents = () =>
     api.fetchAgents(accessToken).then(response => setAgents(response.data));
+
+  useInterval(() => {
+    fetchAgents();
+  }, 60000);
 
   useEffect(() => {
     fetchAgents();

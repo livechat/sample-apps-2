@@ -60,9 +60,9 @@ export default ({ data }) => {
           fill="#dbe5ff"
         />
       </AreaChart>
-      <span>Average Time: {average}</span>
-      <span>Longest Time: {longest}</span>
-      <span>Shortest Time: {shortest}</span>
+      <span>Average Time: {average} h</span>
+      <span>Longest Time: {longest} h</span>
+      <span>Shortest Time: {shortest} h</span>
     </div>
   );
 };

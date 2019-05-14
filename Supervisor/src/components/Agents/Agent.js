@@ -44,7 +44,6 @@ const rowStyle = area => `
 
 const buttonStyle = area => `
   grid-area: ${area};
-  justify-self: center;
   height: 30px;
   width: 80px;
 `;
@@ -134,7 +133,13 @@ export default ({ login, permission, status, name, accessToken }) => {
       <div css={spaceStyle("space")} />
       {["Working", "Chating", "Ratio"].map((e, i) => {
         return (
-          <div key={i}>
+          <div
+            key={i}
+            css={`
+              display: flex;
+              justify-content: center;
+            `}
+          >
             <Button css={buttonStyle("btn1")} onClick={() => handleModal(i)}>
               {e}
             </Button>
