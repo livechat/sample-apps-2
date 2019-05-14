@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { createGlobalStyle } from "styled-components";
 
 import { accountsSdk } from "@livechat/accounts-sdk";
+import LiveChat from "@livechat/agent-app-widget-sdk";
 import "@livechat/design-system/dist/design-system.css";
 import config from "./utils/config";
 import App from "./components";
@@ -16,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
 
 const AppWithAuth = () => {
   const [accessToken, setAccessToken] = useState(null);
-
+  LiveChat.init({ authorize: false });
   useEffect(() => {
     const { client_id, account_url } = config;
     accountsSdk.init({
